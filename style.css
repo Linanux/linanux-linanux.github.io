@@ -505,14 +505,17 @@ main {
         margin: 0 auto;
     }
     .app-download .card-body {
-        text-align: center;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
+        padding-top: 18px;
+        padding-bottom: 18px;
     }
     .app-download .card-body > * {
-        margin-left: auto;
-        margin-right: auto;
+        margin-bottom: 12px;
+    }
+    .app-download .card-body > *:last-child {
+        margin-bottom: 0;
+    }
+    .app-download .card-header {
+        margin-bottom: 16px;
     }
     .region-tip .card-header span {
         font-size: 1.18rem;
@@ -553,6 +556,25 @@ main {
     .app-download.card {
         background: #fff !important;
     }
+    .app-download .card-body {
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+    .app-download .card-body > * {
+        margin-bottom: 12px;
+    }
+    .app-download .card-body > *:last-child {
+        margin-bottom: 0;
+    }
+    .app-download .card-header {
+        margin-bottom: 16px;
+    }
+    .account-info > div {
+        margin-bottom: 8px;
+    }
+    .account-info > div:last-child {
+        margin-bottom: 0;
+    }
 }
 
 /* 第二张卡片内的下载按钮更小 */
@@ -581,7 +603,8 @@ main {
 
 /* 红色下划线样式 */
 .underline-gold {
-    border-bottom: 2px solid #e74c3c;
+    border-bottom: 2px solid #e6a100;
+    color: inherit;
     padding-bottom: 2px;
 }
 
