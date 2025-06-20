@@ -35,7 +35,7 @@
                     <a class="download-btn" href="https://tg388.vip" target="_blank">点击下载APP</a>
                 </div>
                 <div class="card-body">
-                    <div class="download-code">天宫APP下载码：<span id="download-code-value" style="color:red;font-weight:bold;font-size:1.13rem;">2116</span></div>
+                    <div class="download-code">天宫APP下载码：<span style="color:#e74c3c;font-weight:bold;font-size:1.13rem;">2116</span></div>
                     <div class="input-tip">输入下载码下载APP</div>
                     <div class="tip highlight" style="font-size:1.13rem;font-weight:bold;margin-bottom:8px;">防迷路群①：<span style="color:#ffbe3b;">5977778</span></div>
                     <div class="tip highlight" style="font-size:1.13rem;font-weight:bold;margin-bottom:8px;">防迷路群②：<span style="color:#ffbe3b;">7728691</span></div>
@@ -43,7 +43,7 @@
                         <div>蝙蝠客服：<span class="highlight" style="color:#ffbe3b;">107243939</span></div>
                         <div>旺旺客服：<span class="highlight" style="color:#ffbe3b;">176980</span></div>
                     </div>
-                    <div class="tip tip-edge" style="color:#e74c3c;">安卓手机用Edge浏览器下载天宫APP不会拦截</div>
+                    <div class="tip tip-edge">安卓手机用Edge浏览器下载天宫APP不会拦截</div>
                 </div>
             </section>
             <section class="card region-tip">
@@ -79,7 +79,7 @@
                         <div class="tip">安卓手机下载【旋风】或【爱加速】加速器</div>
                         <div class="tip">苹果手机下载【星链】或【绿叶】加速器</div>
                         <div class="tip" style="color:#e67e22;font-weight:bold;">更换: 河南-河北---广东--广西等地区</div>
-                        <div class="tip">即可正常访问娱乐</div>
+                        <div class="tip">就可以正常访问娱乐</div>
                     </div>
                 </section>
             </div>
@@ -205,13 +205,6 @@
         noticeLink.onclick = function(e) { e.preventDefault(); showNotice(); };
         appDownloadLink.onclick = function(e) { e.preventDefault(); showAppDownload(); };
     }
-
-    // 动态获取下载码
-    fetch('/code.json')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('download-code-value').innerText = data.value;
-      });
     </script>
 </body>
 </html>
