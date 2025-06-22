@@ -32,16 +32,16 @@
             <section class="card app-download">
                 <div class="card-header">
                     <span class="underline-gold">天宫集团APP</span>
-                    <a class="download-btn" href="https://tg388.vip" target="_blank">点击下载APP</a>
+                    <a class="download-btn" href="#" target="_blank">点击下载APP</a>
                 </div>
                 <div class="card-body">
-                    <div class="download-code">天宫APP下载码：<span style="color:#e74c3c;font-weight:bold;font-size:1.13rem;">4271</span></div>
+                    <div class="download-code">天宫APP下载码：<span id="download_code" style="color:#e74c3c;font-weight:bold;font-size:1.13rem;"></span></div>
                     <div class="input-tip">输入下载码下载APP</div>
-                    <div class="tip highlight" style="font-size:1.13rem;font-weight:bold;margin-bottom:8px;">防迷路群①：<span style="color:#ffbe3b;">5977778</span></div>
-                    <div class="tip highlight" style="font-size:1.13rem;font-weight:bold;margin-bottom:8px;">防迷路群②：<span style="color:#ffbe3b;">7728691</span></div>
+                    <div class="tip highlight" style="font-size:1.13rem;font-weight:bold;margin-bottom:8px;">防迷路群①：<span id="group1" style="color:#ffbe3b;"></span></div>
+                    <div class="tip highlight" style="font-size:1.13rem;font-weight:bold;margin-bottom:8px;">防迷路群②：<span id="group2" style="color:#ffbe3b;"></span></div>
                     <div class="account-info">
-                        <div>蝙蝠客服：<span class="highlight" style="color:#ffbe3b;">107243939</span></div>
-                        <div>旺旺客服：<span class="highlight" style="color:#ffbe3b;">176980</span></div>
+                        <div>蝙蝠客服：<span id="batman_service" class="highlight" style="color:#ffbe3b;"></span></div>
+                        <div>旺旺客服：<span id="wangwang_service" class="highlight" style="color:#ffbe3b;"></span></div>
                     </div>
                     <div class="tip tip-edge" style="color:#e74c3c;">安卓手机用Edge浏览器下载天宫APP不会拦截</div>
                 </div>
@@ -49,7 +49,7 @@
             <section class="card region-tip">
                 <div class="card-header">
                     <span>加速器要开通会员更改地区</span>
-                    <a class="download-btn" href="https://tg388.vip" target="_blank">点击下载APP</a>
+                    <a class="download-btn" href="#" target="_blank">点击下载APP</a>
                 </div>
                 <div class="card-body">
                     <div class="region-warning">若无法下载天宫APP，或者打开App白屏地区区域网络拦截导致，更换地区即可</div>
@@ -106,7 +106,7 @@
                     </div>
                     <div class="card-header" style="font-size:1.18rem;font-weight:bold;margin-bottom:12px;">APP下载</div>
                     <div style="color:#444;font-size:1.01rem;margin-bottom:18px;">手机APP提供超多当前主流热门游戏，品种繁多倍率高，欢迎下载APP体验！</div>
-                    <a class="download-btn custom-download-btn" href="https://tg388.vip" target="_blank">
+                    <a class="download-btn custom-download-btn" href="#" target="_blank">
                       <span style="vertical-align:middle;display:inline-block;">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:8px;">
                           <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -205,6 +205,42 @@
         noticeLink.onclick = function(e) { e.preventDefault(); showNotice(); };
         appDownloadLink.onclick = function(e) { e.preventDefault(); showAppDownload(); };
     }
+
+    // Fetch dynamic content
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/content')
+            .then(response => response.json())
+            .then(data => {
+                if (!data) return;
+
+                const contentMapping = {
+                    'download_code': data.download_code,
+                    'group1': data.group1,
+                    'group2': data.group2,
+                    'batman_service': data.batman_service,
+                    'wangwang_service': data.wangwang_service
+                };
+
+                for (const id in contentMapping) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = contentMapping[id] || '';
+                    }
+                }
+
+                // Update all download links
+                const downloadLinks = document.querySelectorAll('a.download-btn');
+                downloadLinks.forEach(link => {
+                    if (data.download_url) {
+                        link.href = data.download_url;
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('无法加载网站内容:', error);
+                // You could display a message to the user here
+            });
+    });
     </script>
 </body>
 </html>
