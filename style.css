@@ -611,11 +611,8 @@ main {
 
 /* 红色下划线样式 */
 .underline-gold {
-
-    border-bottom: 2px solid #e6a100;
+    border-bottom: 2px solid #ffbe3b;
     color: inherit;
-
-    border-bottom: 2px solid #e74c3c;
     padding-bottom: 2px;
 }
 
