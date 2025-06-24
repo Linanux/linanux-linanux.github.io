@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天宫APP后台管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .card h2 {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-upload:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .file-upload.dragover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .upload-text {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .file-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-name {
+            color: #333;
+            flex: 1;
+        }
+        
+        .file-size {
+            color: #666;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>天宫APP后台管理系统</h1>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="dashboard-grid">
+            <!-- 网站配置卡片 -->
+            <div class="card">
+                <h2>网站配置管理</h2>
+                
+                <div class="message" id="configMessage"></div>
+                
+                <form id="configForm">
+                    <div class="form-group">
+                        <label for="download_code">下载码</label>
+                        <input type="text" id="download_code" name="download_code" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="group1">防迷路群①</label>
+                        <input type="text" id="group1" name="group1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="group2">防迷路群②</label>
+                        <input type="text" id="group2" name="group2" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="batman_service">蝙蝠客服</label>
+                        <input type="text" id="batman_service" name="batman_service" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wangwang_service">旺旺客服</label>
+                        <input type="text" id="wangwang_service" name="wangwang_service" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="download_url">下载链接</label>
+                        <input type="url" id="download_url" name="download_url" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="backup_url">备用链接</label>
+                        <input type="url" id="backup_url" name="backup_url" required>
+                    </div>
+                    
+                    <button type="submit" class="save-btn" id="saveConfigBtn">
+                        <span id="saveText">保存配置</span>
+                        <div class="loading" id="saveLoading">
+                            <div class="spinner"></div>
+                            <span style="margin-left: 10px;">保存中...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+            
+            <!-- 文件管理卡片 -->
+            <div class="card">
+                <h2>文件管理</h2>
+                
+                <div class="message" id="uploadMessage"></div>
+                
+                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">点击选择文件或拖拽文件到此处</div>
+                    <input type="file" id="fileInput" accept="image/*" multiple>
+                </div>
+                
+                <div class="file-list" id="fileList">
+                    <div style="text-align: center; color: #666; padding: 20px;">
+                        加载中...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载时获取配置
+        window.addEventListener('load', function() {
+            loadConfig();
+            loadFiles();
+        });
+        
+        // 加载网站配置
+        async function loadConfig() {
+            try {
+                const response = await fetch('/admin/config');
+                const config = await response.json();
+                
+                if (config) {
+                    document.getElementById('download_code').value = config.download_code || '';
+                    document.getElementById('group1').value = config.group1 || '';
+                    document.getElementById('group2').value = config.group2 || '';
+                    document.getElementById('batman_service').value = config.batman_service || '';
+                    document.getElementById('wangwang_service').value = config.wangwang_service || '';
+                    document.getElementById('download_url').value = config.download_url || '';
+                    document.getElementById('backup_url').value = config.backup_url || '';
+                }
+            } catch (error) {
+                showMessage('configMessage', '加载配置失败', 'error');
+            }
+        }
+        
+        // 保存配置
+        document.getElementById('configForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const saveBtn = document.getElementById('saveConfigBtn');
+            const saveText = document.getElementById('saveText');
+            const saveLoading = document.getElementById('saveLoading');
+            
+            // 显示加载状态
+            saveBtn.disabled = true;
+            saveText.style.display = 'none';
+            saveLoading.style.display = 'block';
+            
+            const formData = new FormData(e.target);
+            const config = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch('/admin/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(config)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('configMessage', data.message, 'success');
+                } else {
+                    showMessage('configMessage', data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('configMessage', '保存失败，请稍后重试', 'error');
+            } finally {
+                // 恢复按钮状态
+                saveBtn.disabled = false;
+                saveText.style.display = 'block';
+                saveLoading.style.display = 'none';
+            }
+        });
+        
+        // 文件上传处理
+        document.getElementById('fileInput').addEventListener('change', async function(e) {
+            const files = e.target.files;
+            if (files.length === 0) return;
+            
+            for (let file of files) {
+                await uploadFile(file);
+            }
+            
+            // 重新加载文件列表
+            loadFiles();
+        });
+        
+        // 拖拽上传
+        const fileUpload = document.querySelector('.file-upload');
+        
+        fileUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+        
+        fileUpload.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+        });
+        
+        fileUpload.addEventListener('drop', async function(e) {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length === 0) return;
+            
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    await uploadFile(file);
+                }
+            }
+            
+            loadFiles();
+        });
+        
+        // 上传单个文件
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch('/admin/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('uploadMessage', `${file.name} 上传成功`, 'success');
+                } else {
+                    showMessage('uploadMessage', `${file.name} 上传失败: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage('uploadMessage', `${file.name} 上传失败`, 'error');
+            }
+        }
+        
+        // 加载文件列表
+        async function loadFiles() {
+            try {
+                const response = await fetch('/admin/files');
+                const files = await response.json();
+                
+                const fileList = document.getElementById('fileList');
+                
+                if (files.length === 0) {
+                    fileList.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">暂无文件</div>';
+                    return;
+                }
+                
+                fileList.innerHTML = files.map(file => `
+                    <div class="file-item">
+                        <span class="file-name">${file}</span>
+                        <span class="file-size">图片文件</span>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('fileList').innerHTML = 
+                    '<div style="text-align: center; color: #666; padding: 20px;">加载失败</div>';
+            }
+        }
+        
+        // 显示消息
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `message ${type}`;
+            element.style.display = 'block';
+            
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 退出登录
+        async function logout() {
+            try {
+                await fetch('/admin/logout', { method: 'POST' });
+                window.location.href = '/admin/login';
+            } catch (error) {
+                alert('退出失败，请稍后重试');
+            }
+        }
+    </script>
+</body>
+</html>

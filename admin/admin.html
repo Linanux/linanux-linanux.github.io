@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>天宫网站后台管理</title>
+  <style>
+    body { font-family: Arial; max-width: 400px; margin: 40px auto; }
+    label { display: block; margin-top: 12px; }
+    input { width: 100%; padding: 6px; }
+    button { margin-top: 20px; padding: 8px 20px; }
+    #msg { margin-top: 16px; color: green; }
+  </style>
+</head>
+<body>
+  <h2>天宫网站后台管理</h2>
+  <form id="form">
+    <label>下载码 <input name="download_code"></label>
+    <label>防迷路群① <input name="group1"></label>
+    <label>防迷路群② <input name="group2"></label>
+    <label>蝙蝠客服 <input name="batman_service"></label>
+    <label>旺旺客服 <input name="wangwang_service"></label>
+    <label>下载链接 <input name="download_url"></label>
+    <button type="submit">保存</button>
+  </form>
+  <div id="msg"></div>
+  <script>
+    fetch('/api/content').then(r=>r.json()).then(data=>{
+      for(const k in data) document.querySelector(`[name=${k}]`).value = data[k] || '';
+    });
+    document.getElementById('form').onsubmit = async e => {
+      e.preventDefault();
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form));
+      const res = await fetch('/api/content', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      document.getElementById('msg').innerText = (await res.json()).success ? '保存成功！' : '保存失败';
+    };
+  </script>
+</body>
+</html> 
