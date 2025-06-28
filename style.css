@@ -29,11 +29,17 @@ body, html {
     top: 0; left: 0; right: 0; bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: url('images/哈利法塔02.png') no-repeat center center/cover;
+    background: #fffbe6; /* 先显示背景色 */
     z-index: 0;
+    transition: background-image 0.3s ease;
 }
+
+.background.loaded {
+    background: url('images/哈利法塔02.png') no-repeat center center/cover;
+}
+
 @media (min-width: 900px) {
-    .background {
+    .background.loaded {
         background: url('images/哈利法塔02.png') no-repeat center center;
         background-size: cover;
         background-color: #fffbe6;

@@ -4,7 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>天宫APP下载</title>
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="images/哈利法塔02.png" as="image">
+    <link rel="preload" href="images/tg02.jpg" as="image">
+    
+    <!-- DNS预解析 -->
+    <link rel="dns-prefetch" href="//tg388.vip">
+    
     <link rel="stylesheet" href="style.css">
+    
+    <!-- 添加性能监控 -->
+    <script>
+        // 简单的性能监控
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                console.log('页面加载时间:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
+            }, 0);
+        });
+    </script>
 </head>
 <body>
     <div class="background"></div>
@@ -12,10 +32,10 @@
         <header class="header">
             <div class="slider">
                 <div class="slide active">
-                    <img src="images/tg02.jpg" alt="顶部横幅1">
+                    <img src="images/tg02.jpg" alt="顶部横幅1" loading="eager">
                 </div>
                 <div class="slide">
-                    <img src="images/tg03.jpg" alt="顶部横幅2">
+                    <img src="images/tg03.jpg" alt="顶部横幅2" loading="lazy">
                 </div>
                 <div class="slider-dots">
                     <span class="dot active"></span>
@@ -132,6 +152,18 @@
         </main>
     </div>
     <script>
+    // 优化背景图片加载
+    window.addEventListener('DOMContentLoaded', function() {
+        const background = document.querySelector('.background');
+        const bgImage = new Image();
+        
+        bgImage.onload = function() {
+            background.classList.add('loaded');
+        };
+        
+        bgImage.src = 'images/哈利法塔02.png';
+    });
+
     // 轮播图功能
     const slides = document.querySelectorAll('.slide');
     const dots = document.querySelectorAll('.dot');
